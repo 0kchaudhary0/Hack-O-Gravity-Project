@@ -2786,7 +2786,7 @@ body.large-text h3 { font-size: 2rem; }
   30% { transform: translateY(-10px); }
 }
 
-/* Scrollbar styling */
+/* Scrollbar  styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
