@@ -59,7 +59,7 @@ const weatherData = {
 };
 
 const enhancedFacilities = [
-    // Delhi
+    
     {
         name: 'IARI Soil Testing Laboratory',
         type: 'soil-testing',
@@ -95,7 +95,7 @@ const enhancedFacilities = [
         timings: '9:30 AM - 5:30 PM',
         city: 'Delhi'
     },
-    // Mumbai
+    
     {
         name: 'Maharashtra State Soil Testing Laboratory',
         type: 'soil-testing',
@@ -130,7 +130,7 @@ const enhancedFacilities = [
         timings: '9:00 AM - 5:30 PM',
         city: 'Mumbai'
     },
-    // Bangalore
+    
     {
         name: 'University of Agricultural Sciences Soil Lab',
         type: 'soil-testing',
@@ -154,7 +154,7 @@ const enhancedFacilities = [
         timings: '4:00 AM - 10:00 AM',
         city: 'Bangalore'
     },
-    // Chennai
+    
     {
         name: 'Tamil Nadu Agricultural University Soil Lab',
         type: 'soil-testing',
@@ -178,7 +178,7 @@ const enhancedFacilities = [
         timings: '2:00 AM - 10:00 AM',
         city: 'Chennai'
     },
-    // Hyderabad
+    
     {
         name: 'ICRISAT Soil Laboratory',
         type: 'soil-testing',
@@ -191,7 +191,7 @@ const enhancedFacilities = [
         cost: '₹250-550 per sample',
         city: 'Hyderabad'
     },
-    // Kolkata
+    
     {
         name: 'West Bengal Soil Testing Laboratory',
         type: 'soil-testing',
