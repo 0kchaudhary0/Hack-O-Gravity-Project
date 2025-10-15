@@ -526,38 +526,11 @@ Built for Indian farmers to democratize access to AI-powered agricultural insigh
 
 ---
 
-## 📞 Support
-
-### Need Help?
-
-- **Documentation**: Check this README and code comments
-- **Issues**: [GitHub Issues](https://github.com/yourusername/agrismart-advisor/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/agrismart-advisor/discussions)
-- **Email**: support@agrismart.com (if applicable)
-
 ### Farmer Helpline
 
 For agricultural emergencies:
 - **Kisan Call Centre**: 1800-180-1551
 - **Government Helpline**: 1800-115-526
-
----
-
-## 🗺️ Roadmap
-
-### Version 2.1 (Upcoming)
-- [ ] Mobile app (Android/iOS)
-- [ ] Offline AI models for remote areas
-- [ ] Crop disease detection via image recognition
-- [ ] Market price predictions using ML
-- [ ] Community forum for farmers
-
-### Version 3.0 (Future)
-- [ ] IoT sensor integration
-- [ ] Satellite imagery analysis
-- [ ] Blockchain for supply chain
-- [ ] Insurance integration
-- [ ] Expert video consultations
 
 ---
 
@@ -568,14 +541,6 @@ For agricultural emergencies:
 - **Crops Covered**: 50+ major Indian crops
 - **API Integrations**: 5+ government and weather APIs
 - **Accessibility**: WCAG 2.1 AA compliant
-
----
-
-## 🌟 Star History
-
-If this project helps you, please ⭐ star the repository!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/agrismart-advisor&type=Date)](https://star-history.com/#yourusername/agrismart-advisor&Date)
 
 ---
 
