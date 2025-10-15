@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiMitra - AI Agriculture Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-seedling"></i>
+                <span>KrishiMitra</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link" data-section="home">Home</a></li>
+                <li><a href="#prediction" class="nav-link" data-section="prediction">Crop Prediction</a></li>
+                <li><a href="#chat" class="nav-link" data-section="chat">AI Assistant</a></li>
+                <li><a href="#weather" class="nav-link" data-section="weather">Weather</a></li>
+                <li><a href="#soil" class="nav-link" data-section="soil">Soil Health</a></li>
+                <li><a href="#facilities" class="nav-link" data-section="facilities">Facilities</a></li>
+            </ul>
+            <div class="nav-controls">
+                <select id="languageSelect" class="language-select">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="bn">বাংলা</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="te">తెలుగు</option>
+                    <option value="mr">मराठी</option>
+                    <option value="gu">ગુજરાતી</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                </select>
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="voiceToggle" class="voice-toggle">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button id="settingsToggle" class="settings-toggle">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="nav-hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to KrishiMitra</h1>
+                <p class="hero-subtitle">Your AI-Powered Agricultural Companion</p>
+                <p class="hero-description">Get crop predictions, weather updates, soil analysis, and expert farming advice all in one place.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn--primary" onclick="showSection('prediction')">Start Prediction</button>
+                    <button class="btn btn--outline" onclick="showSection('chat')">Ask AI Assistant</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-icons">
+                    <i class="fas fa-seedling"></i>
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-cloud-rain"></i>
+                    <i class="fas fa-leaf"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card" onclick="showSection('prediction')">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Crop Prediction</h3>
+                <p>AI-powered yield predictions based on weather and soil data</p>
+            </div>
+            <div class="feature-card" onclick="showSection('chat')">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI Assistant</h3>
+                <p>Get expert farming advice from our intelligent chatbot</p>
+            </div>
+            <div class="feature-card" onclick="showSection('weather')">
+                <div class="feature-icon">
+                    <i class="fas fa-cloud-sun"></i>
+                </div>
+                <h3>Weather Updates</h3>
+                <p>Real-time weather forecasts and farming alerts</p>
+            </div>
+            <div class="feature-card" onclick="showSection('soil')">
+                <div class="feature-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3>Soil Analysis</h3>
+                <p>Comprehensive soil health reports and recommendations</p>
+            </div>
+        </div>
+        
+        <div class="current-weather-widget">
+            <h3><i class="fas fa-map-marker-alt"></i> Current Location Weather</h3>
+            <div id="currentWeather" class="weather-display">
+                <div class="weather-info">
+                    <span id="currentLocation">Detecting location...</span>
+                    <span id="currentTemp">--°C</span>
+                    <span id="currentCondition">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crop Prediction Section -->
+    <section id="prediction" class="section">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-line"></i> Crop Yield Prediction</h2>
+            <p>Get AI-powered yield predictions for your crops</p>
+        </div>
+        
+        <div class="prediction-container">
+            <div class="prediction-form">
+                <form id="predictionForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Select Crop</label>
+                            <select id="cropSelect" class="form-control">
+                                <option value="">Choose a crop</option>
+                                <option value="rice">Rice</option>
+                                <option value="wheat">Wheat</option>
+                                <option value="cotton">Cotton</option>
+                                <option value="sugarcane">Sugarcane</option>
+                                <option value="maize">Maize</option>
+                                <option value="groundnut">Groundnut</option>
+                                <option value="soybean">Soybean</option>
+                                <option value="mustard">Mustard</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Season</label>
+                            <select id="seasonSelect" class="form-control">
+                                <option value="">Select season</option>
+                                <option value="kharif">Kharif (Jun-Oct)</option>
+                                <option value="rabi">Rabi (Nov-Apr)</option>
+                                <option value="summer">Summer (Apr-Jun)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Soil Type</label>
+                            <select id="soilSelect" class="form-control">
+                                <option value="">Select soil type</option>
+                                <option value="alluvial">Alluvial Soil</option>
+                                <option value="black">Black Soil</option>
+                                <option value="red">Red Soil</option>
+                                <option value="laterite">Laterite Soil</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Area (hectares)</label>
+                            <input type="number" id="areaInput" class="form-control" placeholder="Enter area" min="0.1" step="0.1">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Expected Rainfall (mm)</label>
+                            <input type="number" id="rainfallInput" class="form-control" placeholder="Enter expected rainfall" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Avg Temperature (°C)</label>
+                            <input type="number" id="temperatureInput" class="form-control" placeholder="Enter average temperature" min="0" max="50">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--full-width">
+                        <i class="fas fa-magic"></i> Predict Yield
+                    </button>
+                </form>
+            </div>
+            
+            <div id="predictionResults" class="prediction-results" style="display: none;">
+                <div class="result-card">
+                    <h3><i class="fas fa-chart-bar"></i> Prediction Results</h3>
+                    <div id="yieldPrediction" class="yield-result"></div>
+                    <div id="alternativeCrops" class="alternative-crops"></div>
+                    <div id="recommendations" class="recommendations"></div>
+                </div>
+                
+                <div class="result-chart">
+                    <canvas id="yieldChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Assistant Section -->
+    <section id="chat" class="section">
+        <div class="section-header">
+            <h2><i class="fas fa-robot"></i> AI Farming Assistant - Ollama Powered</h2>
+            <p>Get expert advice from our Ollama-powered farming consultant with intelligent crop suggestions</p>
+        </div>
+        
+        <div class="chat-container">
+            <div class="chat-sidebar">
+                <div class="chat-avatar">
+                    <div class="assistant-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>KrishiBot</h3>
+                    <p>Your AI Farming Expert</p>
+                </div>
+                
+                <div class="ollama-status" id="ollamaStatus">
+                    <span class="status-indicator status-offline"></span>
+                    Checking Ollama Connection...
+                </div>
+                
+                <div class="model-selection">
+                    <h4>AI Model</h4>
+                    <select id="ollamaModelSelect" class="form-control">
+                        <option value="llama2">Llama 2</option>
+                        <option value="mistral">Mistral</option>
+                        <option value="codellama">CodeLlama</option>
+                        <option value="neural-chat">Neural Chat</option>
+                    </select>
+                </div>
+                
+                <div class="crop-suggestions-section">
+                    <h4>🌾 Smart Crop Suggestions</h4>
+                    <p class="suggestion-desc">Get AI-powered crop recommendations based on your location, weather, soil, and season.</p>
+                    <button id="getCropSuggestionsBtn" class="btn btn--primary btn--full-width" style="margin-bottom: 16px;">
+                        <i class="fas fa-seedling"></i> Get Crop Suggestions
+                    </button>
+                </div>
+                
+                <div class="quick-questions">
+                    <h4>Quick Questions</h4>
+                    <div class="quick-question" onclick="askQuestion('What is the best fertilizer for rice?')">🌾 Best fertilizer for rice?</div>
+                    <div class="quick-question" onclick="askQuestion('How to prevent pest attacks?')">🐛 Prevent pest attacks?</div>
+                    <div class="quick-question" onclick="askQuestion('When to harvest wheat?')">🌾 When to harvest wheat?</div>
+                    <div class="quick-question" onclick="askQuestion('Organic farming tips?')">🌱 Organic farming tips?</div>
+                    <div class="quick-question" onclick="askQuestion('Tell me about current market prices')">💰 Market prices?</div>
+                    <div class="quick-question" onclick="askQuestion('Which government schemes can help me?')">🏛️ Government schemes?</div>
+                </div>
+            </div>
+            
+            <div class="chat-main">
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message bot-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm KrishiBot, your AI farming assistant powered by Ollama AI. I can help you with:</p>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>🌾 <strong>Smart Crop Suggestions</strong> - Location-based crop recommendations</li>
+                                <li>🌤️ Weather-based farming advice</li>
+                                <li>🌱 Soil health and nutrient management</li>
+                                <li>🐛 Pest &amp; disease management</li>
+                                <li>💰 Market trends and pricing</li>
+                                <li>🏛️ Government schemes and subsidies</li>
+                            </ul>
+                            <p><strong>Try the "Get Crop Suggestions" button for personalized recommendations!</strong></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Ask about farming, crops, weather, or soil...">
+                        <button id="voiceInputBtn" class="voice-input-btn">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button id="sendMessageBtn" class="send-message-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weather Section -->
+    <section id="weather" class="section">
+        <div class="section-header">
+            <h2><i class="fas fa-cloud-sun"></i> Weather Dashboard</h2>
+            <p>Real-time weather updates and forecasts for farmers</p>
+        </div>
+        
+        <div class="weather-container">
+            <div class="current-weather-card">
+                <div class="weather-location">
+                    <h3 id="weatherLocation">Current Location</h3>
+                    <button id="detectLocationBtn" class="btn btn--outline btn--sm">
+                        <i class="fas fa-map-marker-alt"></i> Detect Location
+                    </button>
+                </div>
+                
+                <div class="weather-current">
+                    <div class="weather-main">
+                        <div class="weather-temp" id="weatherTemp">25°C</div>
+                        <div class="weather-condition" id="weatherCondition">Partly Cloudy</div>
+                    </div>
+                    <div class="weather-icon">
+                        <i class="fas fa-cloud-sun" id="weatherIcon"></i>
+                    </div>
+                </div>
+                
+                <div class="weather-details">
+                    <div class="weather-detail">
+                        <i class="fas fa-tint"></i>
+                        <span>Humidity</span>
+                        <span id="weatherHumidity">65%</span>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-wind"></i>
+                        <span>Wind Speed</span>
+                        <span id="weatherWind">12 km/h</span>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-cloud-rain"></i>
+                        <span>Rainfall</span>
+                        <span id="weatherRainfall">2mm</span>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-eye"></i>
+                        <span>Visibility</span>
+                        <span id="weatherVisibility">10km</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="weather-forecast">
+                <h3>7-Day Forecast</h3>
+                <div id="weatherForecast" class="forecast-grid">
+                    <!-- Forecast items will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="weather-alerts">
+                <h3><i class="fas fa-exclamation-triangle"></i> Weather Alerts</h3>
+                <div id="weatherAlerts" class="alerts-container">
+                    <!-- Weather alerts will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Soil Health Section -->
+    <section id="soil" class="section">
+        <div class="section-header">
+            <h2><i class="fas fa-flask"></i> Soil Health Analysis</h2>
+            <p>Comprehensive soil analysis and recommendations</p>
+        </div>
+        
+        <div class="soil-container">
+            <div class="soil-input">
+                <div class="location-input">
+                    <h3>Select Location for Soil Analysis</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <select id="stateSelect" class="form-control">
+                                <option value="">Select State</option>
+                                <option value="delhi">Delhi</option>
+                                <option value="punjab">Punjab</option>
+                                <option value="uttar-pradesh">Uttar Pradesh</option>
+                                <option value="maharashtra">Maharashtra</option>
+                                <option value="karnataka">Karnataka</option>
+                                <option value="tamil-nadu">Tamil Nadu</option>
+                                <option value="west-bengal">West Bengal</option>
+                                <option value="gujarat">Gujarat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">District</label>
+                            <input type="text" id="districtInput" class="form-control" placeholder="Enter district name">
+                        </div>
+                    </div>
+                    <button id="analyzeSoilBtn" class="btn btn--primary">
+                        <i class="fas fa-search"></i> Analyze Soil
+                    </button>
+                </div>
+            </div>
+            
+            <div id="soilResults" class="soil-results" style="display: none;">
+                <div class="soil-profile">
+                    <h3><i class="fas fa-chart-pie"></i> Soil Profile</h3>
+                    <div id="soilProfileData" class="soil-data">
+                        <!-- Soil profile data will be populated -->
+                    </div>
+                </div>
+                
+                <div class="soil-nutrients">
+                    <h3><i class="fas fa-seedling"></i> Nutrient Analysis</h3>
+                    <div class="nutrients-grid">
+                        <div class="nutrient-card">
+                            <div class="nutrient-icon">N</div>
+                            <div class="nutrient-info">
+                                <span class="nutrient-name">Nitrogen</span>
+                                <span id="nitrogenLevel" class="nutrient-level">Medium</span>
+                            </div>
+                        </div>
+                        <div class="nutrient-card">
+                            <div class="nutrient-icon">P</div>
+                            <div class="nutrient-info">
+                                <span class="nutrient-name">Phosphorus</span>
+                                <span id="phosphorusLevel" class="nutrient-level">High</span>
+                            </div>
+                        </div>
+                        <div class="nutrient-card">
+                            <div class="nutrient-icon">K</div>
+                            <div class="nutrient-info">
+                                <span class="nutrient-name">Potassium</span>
+                                <span id="potassiumLevel" class="nutrient-level">Low</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="fertilizer-recommendations">
+                    <h3><i class="fas fa-leaf"></i> Fertilizer Recommendations</h3>
+                    <div id="fertilizerRecs" class="recommendations-grid">
+                        <!-- Fertilizer recommendations will be populated -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Finder Section -->
+    <section id="facilities" class="section">
+        <div class="section-header">
+            <h2><i class="fas fa-map-marked-alt"></i> Agricultural Facilities Finder</h2>
+            <p>Locate nearby soil testing labs and agricultural services</p>
+        </div>
+        
+        <div class="facilities-container">
+            <div class="facilities-search">
+                <div class="search-controls">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Search Location</label>
+                            <input type="text" id="facilitySearch" class="form-control" placeholder="Enter city or area name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Facility Type</label>
+                            <select id="facilityType" class="form-control">
+                                <option value="all">All Facilities</option>
+                                <option value="soil-testing">Soil Testing Labs</option>
+                                <option value="research-center">Research Centers</option>
+                                <option value="government-office">Government Offices</option>
+                                <option value="market">Agricultural Markets</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="searchFacilitiesBtn" class="btn btn--primary">
+                        <i class="fas fa-search"></i> Search Facilities
+                    </button>
+                </div>
+            </div>
+            
+            <div class="facilities-map-container">
+                <div class="map-controls">
+                    <button id="getCurrentLocationBtn" class="btn btn--outline btn--sm">
+                        <i class="fas fa-map-marker-alt"></i> My Location
+                    </button>
+                    <button id="clearFiltersBtn" class="btn btn--outline btn--sm">
+                        <i class="fas fa-filter"></i> Clear Filters
+                    </button>
+                </div>
+                <div id="facilitiesMap" class="facilities-map"></div>
+            </div>
+            
+            <div class="facilities-list">
+                <h3>Nearby Facilities</h3>
+                <div id="facilitiesList" class="facilities-grid">
+                    <!-- Facilities will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="settings-modal">
+        <div class="settings-modal-content">
+            <div class="settings-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button id="closeSettings" class="close-settings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="settings-body">
+                <div class="setting-group">
+                    <h3>Accessibility</h3>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="readWebpageToggle" class="setting-checkbox">
+                            <span class="setting-text">Read Webpage Aloud</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="voiceControlsToggle" class="setting-checkbox">
+                            <span class="setting-text">Voice Controls</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>Language</h3>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <span class="setting-text">Interface Language</span>
+                            <select id="settingsLanguageSelect" class="setting-select">
+                                <option value="en">English</option>
+                                <option value="hi">हिंदी (Hindi)</option>
+                                <option value="bn">বাংলা (Bengali)</option>
+                                <option value="ta">தமிழ் (Tamil)</option>
+                                <option value="te">తెలుగు (Telugu)</option>
+                                <option value="mr">मराठी (Marathi)</option>
+                                <option value="gu">ગુજરાતી (Gujarati)</option>
+                                <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>Location &amp; Weather</h3>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="autoLocationToggle" class="setting-checkbox" checked>
+                            <span class="setting-text">Auto-detect Location</span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <input type="checkbox" id="weatherNotificationsToggle" class="setting-checkbox" checked>
+                            <span class="setting-text">Weather Notifications</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3>Voice Commands</h3>
+                    <div class="voice-controls">
+                        <button id="readPageBtn" class="btn btn--outline btn--sm">
+                            <i class="fas fa-volume-up"></i> Read Page
+                        </button>
+                        <button id="stopReadingBtn" class="btn btn--outline btn--sm">
+                            <i class="fas fa-stop"></i> Stop
+                        </button>
+                        <button id="voiceInputBtn2" class="btn btn--outline btn--sm">
+                            <i class="fas fa-microphone"></i> Voice Input
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accessibility Panel -->
+    <div id="accessibilityPanel" class="accessibility-panel">
+        <button id="accessibilityToggle" class="accessibility-toggle">
+            <i class="fas fa-universal-access"></i>
+        </button>
+        <div class="accessibility-controls">
+            <h3>Accessibility Options</h3>
+            <div class="accessibility-option">
+                <button id="textSizeIncrease" class="btn btn--outline btn--sm">
+                    <i class="fas fa-text-height"></i> Larger Text
+                </button>
+            </div>
+            <div class="accessibility-option">
+                <button id="highContrastToggle" class="btn btn--outline btn--sm">
+                    <i class="fas fa-adjust"></i> High Contrast
+                </button>
+            </div>
+            <div class="accessibility-option">
+                <button id="readAloudToggle" class="btn btn--outline btn--sm">
+                    <i class="fas fa-volume-up"></i> Read Aloud
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
